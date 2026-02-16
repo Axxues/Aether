@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth" 
+    x-data="{ 
+        darkMode: localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches),
+        mobileOpen: false,
+        scrolled: false,
+        activeFilter: 'all'
+    }" 
+    :class="{ 'dark': darkMode }" 
+    x-init="$watch('darkMode', val => localStorage.setItem('theme', val ? 'dark' : 'light')); scrolled = (window.pageYOffset > 50)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | Aether</title>
+    <meta name="description" content="Selected Works by Zero Bloat UI">
+    
+    <link rel="stylesheet" href="assets/css/fonts.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script defer src="assets/js/alpine.min.js"></script>
+    <script src="assets/js/dark-mode.js"></script>
+    <script src="assets/js/tailwind.config.js"></script>
+</head>
+<body class="antialiased overflow-x-hidden relative selection:bg-accent selection:text-white"
+    @mousemove="$el.style.setProperty('--mouse-x', $event.clientX + 'px'); $el.style.setProperty('--mouse-y', $event.clientY + 'px')">
+
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden" 
+        x-data="{ x: 0, y: 0 }" @mousemove.window="x = (window.innerWidth - $event.clientX * 2) / 100; y = (window.innerHeight - $event.clientY * 2) / 100" 
+        :style="`transform: translateX(${x}px) translateY(${y}px)`">
+        
+        <div class="absolute top-[-10%] left-[-10%] w-[40rem] h-[40rem] bg-purple-400/10 md:bg-purple-400/30 dark:bg-accent/5 md:dark:bg-accent/10 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[80px] animate-blob"></div>
+        
+        <div class="absolute top-[30%] right-[-10%] w-[35rem] h-[35rem] bg-indigo-300/10 md:bg-indigo-300/30 dark:bg-purple-500/5 md:dark:bg-purple-500/10 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[80px] animate-blob animation-delay-2000"></div>
+        
+        <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150"></div>
+    </div>
+
+    <header class="fixed z-50 left-0 w-full flex justify-center mt-3 pointer-events-none" 
+            x-show="!mobileOpen"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 -translate-y-4"
+            x-transition:enter-end="opacity-100 translate-y-0"
+            @scroll.window="scrolled = (window.pageYOffset > 50)">
+        
+        <nav class="flex items-center justify-between px-6 py-3 pointer-events-auto border border-white/10 shadow-lg transition-all duration-500 ease-out w-[95%] max-w-[80rem] rounded-2xl top-4 glass" 
+            :class="{ 'w-[92%] max-w-5xl rounded-full top-4 glass shadow-xl': scrolled, 'w-[95%] max-w-[80rem] rounded-2xl top-4 glass': !scrolled }">
+            
+            <a href="index.html" class="flex items-center gap-2 font-bold text-lg tracking-tight z-10 group active:scale-95 transition-transform">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-accent to-purple-500 shadow-lg group-hover:rotate-12 transition-transform duration-300 overflow-hidden">
+                    <img src="assets/imgs/creator.jpg" alt="Profile" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity">
+                </div>
+                Aether
+            </a>
+
+            <div class="hidden md:flex items-center gap-1">
+                <a href="index.html" class="nav-link relative px-5 py-2 text-sm font-medium text-muted hover:text-foreground transition-all duration-300 group hover:-translate-y-0.5">Work<span class="active-indicator absolute inset-x-2 bottom-1 h-0.5 bg-accent transform scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-300"></span></a>
+                <a href="portfolio.html" class="nav-link relative px-5 py-2 text-sm font-medium text-muted hover:text-foreground transition-all duration-300 group hover:-translate-y-0.5">Portfolio<span class="active-indicator absolute inset-x-2 bottom-1 h-0.5 bg-accent transform scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-300"></span></a>
+                <a href="about.html" class="nav-link relative px-5 py-2 text-sm font-medium text-muted hover:text-foreground transition-all duration-300 group hover:-translate-y-0.5">About<span class="active-indicator absolute inset-x-2 bottom-1 h-0.5 bg-accent transform scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-300"></span></a>
+                <a href="blog.html" class="nav-link relative px-5 py-2 text-sm font-medium text-muted hover:text-foreground transition-all duration-300 group hover:-translate-y-0.5">Writing<span class="active-indicator absolute inset-x-2 bottom-1 h-0.5 bg-accent transform scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-300"></span></a>
+            </div>
+
+            <div class="flex items-center gap-3 z-10">
+                <button @click="darkMode = !darkMode" class="p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 text-muted hover:text-foreground transition-all active:scale-90 active:rotate-45 duration-300">
+                    <svg class="w-5 h-5 block dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                    <svg class="w-5 h-5 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                    </svg>
+                </button>
+                <a href="contact.html" class="hidden md:flex btn-shine bg-foreground text-background px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-accent hover:text-white hover:shadow-lg hover:shadow-accent/40 transition-all transform hover:-translate-y-1 active:scale-95 active:shadow-none">Let's Talk</a>
+                <button @click="mobileOpen = true" class="md:hidden p-2 text-foreground active:scale-90 transition-transform"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
+            </div>
+        </nav>
+    </header>
+
+    <div x-show="mobileOpen" style="display: none;" 
+         class="fixed inset-0 z-[60] flex flex-col px-4 pt-4" 
+         role="dialog" aria-modal="true">
+        
+        <div class="absolute inset-0 bg-background/95 backdrop-blur-xl" 
+            x-show="mobileOpen"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            @click="mobileOpen = false"></div>
+    
+        <nav class="relative flex flex-col w-full max-w-sm mx-auto" @click.outside="mobileOpen = false">
+             
+             <div class="flex items-center justify-between mb-8 px-2"
+                x-show="mobileOpen" x-transition:enter="transition ease-out duration-300 delay-100" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
+                <div class="flex items-center gap-2 font-bold text-lg tracking-tight">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-accent to-purple-500 shadow-lg group-hover:rotate-12 transition-transform duration-300 overflow-hidden">
+                        <img src="assets/imgs/creator.jpg" 
+                            alt="Profile" 
+                            class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity">
+                    </div>
+                    <span>Aether</span>
+                </div>
+                 
+                <button @click="mobileOpen = false" class="p-2 rounded-full bg-surface shadow-sm border border-border text-foreground hover:bg-muted/10 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+             </div>
+
+            <div class="space-y-3">
+                 <a href="index.html" class="mobile-card group flex items-center gap-4 p-3 rounded-2xl border border-border/50 bg-surface hover:bg-surface/80 hover:scale-[1.02] transition-all duration-300 shadow-md"
+                    x-show="mobileOpen" x-transition:enter="transition ease-out duration-300 delay-100" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+                    <div class="icon-box w-10 h-10 rounded-xl bg-background/50 shadow-inner flex items-center justify-center text-muted group-hover:text-accent transition-colors">
+                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-title text-lg font-bold tracking-tight text-foreground group-hover:text-accent transition-colors">Work</span>
+                        <span class="text-xs text-muted">Featured Projects</span>
+                    </div>
+                </a>
+
+                <a href="portfolio.html" class="mobile-card group flex items-center gap-4 p-3 rounded-2xl border border-border/50 bg-surface hover:bg-surface/80 hover:scale-[1.02] transition-all duration-300 shadow-md"
+                    x-show="mobileOpen" x-transition:enter="transition ease-out duration-300 delay-150" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+                    <div class="icon-box w-10 h-10 rounded-xl bg-background/50 shadow-inner flex items-center justify-center text-muted group-hover:text-accent transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-title text-lg font-bold tracking-tight text-foreground group-hover:text-accent transition-colors">Portfolio</span>
+                        <span class="text-xs text-muted">All Cases</span>
+                    </div>
+                </a>
+
+                <a href="about.html" class="mobile-card group flex items-center gap-4 p-3 rounded-2xl border border-border/50 bg-surface hover:bg-surface/80 hover:scale-[1.02] transition-all duration-300 shadow-md"
+                    x-show="mobileOpen" x-transition:enter="transition ease-out duration-300 delay-200" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+                    <div class="icon-box w-10 h-10 rounded-xl bg-background/50 shadow-inner flex items-center justify-center text-muted group-hover:text-accent transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-title text-lg font-bold tracking-tight text-foreground group-hover:text-accent transition-colors">About</span>
+                        <span class="text-xs text-muted">My Story</span>
+                    </div>
+                </a>
+
+                <a href="blog.html" class="mobile-card group flex items-center gap-4 p-3 rounded-2xl border border-border/50 bg-surface hover:bg-surface/80 hover:scale-[1.02] transition-all duration-300 shadow-md"
+                    x-show="mobileOpen" x-transition:enter="transition ease-out duration-300 delay-250" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+                    <div class="icon-box w-10 h-10 rounded-xl bg-background/50 shadow-inner flex items-center justify-center text-muted group-hover:text-accent transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-title text-lg font-bold tracking-tight text-foreground group-hover:text-accent transition-colors">Writing</span>
+                        <span class="text-xs text-muted">Thoughts & Notes</span>
+                    </div>
+                </a>
+
+                 <a href="contact.html" class="mobile-card group flex items-center gap-4 p-3 rounded-2xl border border-border/50 bg-surface hover:bg-surface/80 hover:scale-[1.02] transition-all duration-300 shadow-md"
+                    x-show="mobileOpen" x-transition:enter="transition ease-out duration-300 delay-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+                     <div class="icon-box w-10 h-10 rounded-xl bg-background/50 shadow-inner flex items-center justify-center text-muted group-hover:text-accent transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                     </div>
+                     <div class="flex flex-col">
+                        <span class="text-title text-lg font-bold tracking-tight text-foreground group-hover:text-accent transition-colors">Contact</span>
+                        <span class="text-xs text-muted">Let's Talk</span>
+                    </div>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <main class="relative z-10 pt-32 pb-20">
+        
+        <section class="max-w-6xl mx-auto px-6 mb-20 text-center">
+            <span class="reveal-up inline-block py-1 px-3 rounded-full bg-accent/10 text-accent text-sm font-semibold mb-6">Selected Works</span>
+            <h1 class="reveal-up text-5xl md:text-7xl font-bold tracking-tight mb-6">
+                Creating impact through <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent to-purple-500">digital excellence.</span>
+            </h1>
+            <p class="reveal-up text-muted text-lg max-w-2xl mx-auto">
+                A curated selection of projects demonstrating my expertise in frontend development, product design, and technical strategy.
+            </p>
+        </section>
+
+        <section class="max-w-7xl mx-auto px-6 mb-32">
+            
+            <div class="reveal-up flex flex-wrap justify-center gap-3 mb-16">
+                <button @click="activeFilter = 'all'" :class="{ 'active': activeFilter === 'all' }" class="filter-btn px-6 py-2 rounded-full border border-border bg-surface text-sm font-medium hover:border-foreground transition-all">All Projects</button>
+                <button @click="activeFilter = 'design'" :class="{ 'active': activeFilter === 'design' }" class="filter-btn px-6 py-2 rounded-full border border-border bg-surface text-sm font-medium hover:border-foreground transition-all">Design</button>
+                <button @click="activeFilter = 'development'" :class="{ 'active': activeFilter === 'development' }" class="filter-btn px-6 py-2 rounded-full border border-border bg-surface text-sm font-medium hover:border-foreground transition-all">Development</button>
+                <button @click="activeFilter = 'strategy'" :class="{ 'active': activeFilter === 'strategy' }" class="filter-btn px-6 py-2 rounded-full border border-border bg-surface text-sm font-medium hover:border-foreground transition-all">Strategy</button>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <div class="perspective-1000" x-show="activeFilter === 'all' || activeFilter === 'development'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100">
+                    <a href="project-detail.html" class="block tilt-card group">
+                        <div class="glass p-3 rounded-3xl border border-white/10 spotlight-card overflow-hidden">
+                            <div class="aspect-[4/3] rounded-2xl overflow-hidden mb-6 relative">
+                                <div class="absolute inset-0 bg-accent/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
+                                <img src="assets/imgs/portfolio/portfolio1.avif" alt="Project" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700">
+                            </div>
+                            <div class="px-3 pb-3">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-xs font-bold text-accent uppercase tracking-wider">Development</span>
+                                    <span class="text-xs text-muted">2024</span>
+                                </div>
+                                <h3 class="text-2xl font-bold mb-2 group-hover:text-accent transition-colors">NeoBank App</h3>
+                                <p class="text-sm text-muted line-clamp-2">A fintech dashboard visualization tool handling millions of data points.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="perspective-1000" x-show="activeFilter === 'all' || activeFilter === 'design'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100">
+                    <a href="project-detail.html" class="block tilt-card group">
+                        <div class="glass p-3 rounded-3xl border border-white/10 spotlight-card overflow-hidden">
+                            <div class="aspect-[4/3] rounded-2xl overflow-hidden mb-6 relative">
+                                <div class="absolute inset-0 bg-purple-500/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
+                                <img src="assets/imgs/portfolio/portfolio2.avif" alt="Project" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700">
+                            </div>
+                            <div class="px-3 pb-3">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-xs font-bold text-purple-500 uppercase tracking-wider">Design</span>
+                                    <span class="text-xs text-muted">2023</span>
+                                </div>
+                                <h3 class="text-2xl font-bold mb-2 group-hover:text-purple-500 transition-colors">Lumina Arch</h3>
+                                <p class="text-sm text-muted line-clamp-2">Minimalist portfolio for an award-winning architecture firm.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="perspective-1000" x-show="activeFilter === 'all' || activeFilter === 'development'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100">
+                    <a href="project-detail.html" class="block tilt-card group">
+                        <div class="glass p-3 rounded-3xl border border-white/10 spotlight-card overflow-hidden">
+                            <div class="aspect-[4/3] rounded-2xl overflow-hidden mb-6 relative">
+                                <div class="absolute inset-0 bg-blue-500/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
+                                <img src="assets/imgs/portfolio/portfolio3.avif" alt="Project" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700">
+                            </div>
+                            <div class="px-3 pb-3">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-xs font-bold text-blue-500 uppercase tracking-wider">Development</span>
+                                    <span class="text-xs text-muted">2023</span>
+                                </div>
+                                <h3 class="text-2xl font-bold mb-2 group-hover:text-blue-500 transition-colors">TaskMaster SaaS</h3>
+                                <p class="text-sm text-muted line-clamp-2">Real-time collaboration platform featuring live cursors.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="perspective-1000" x-show="activeFilter === 'all' || activeFilter === 'strategy'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100">
+                    <a href="project-detail.html" class="block tilt-card group">
+                        <div class="glass p-3 rounded-3xl border border-white/10 spotlight-card overflow-hidden">
+                            <div class="aspect-[4/3] rounded-2xl overflow-hidden mb-6 relative">
+                                <div class="absolute inset-0 bg-pink-500/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
+                                <img src="assets/imgs/portfolio/portfolio4.avif" alt="Project" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700">
+                            </div>
+                            <div class="px-3 pb-3">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-xs font-bold text-pink-500 uppercase tracking-wider">Strategy</span>
+                                    <span class="text-xs text-muted">2022</span>
+                                </div>
+                                <h3 class="text-2xl font-bold mb-2 group-hover:text-pink-500 transition-colors">Vortex Analytics</h3>
+                                <p class="text-sm text-muted line-clamp-2">Data strategy and visualization for enterprise clients.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="perspective-1000" x-show="activeFilter === 'all' || activeFilter === 'design'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100">
+                    <a href="project-detail.html" class="block tilt-card group">
+                        <div class="glass p-3 rounded-3xl border border-white/10 spotlight-card overflow-hidden">
+                            <div class="aspect-[4/3] rounded-2xl overflow-hidden mb-6 relative">
+                                <div class="absolute inset-0 bg-indigo-500/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
+                                <img src="assets/imgs/portfolio/portfolio5.avif" alt="Project" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700">
+                            </div>
+                            <div class="px-3 pb-3">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-xs font-bold text-indigo-500 uppercase tracking-wider">Design</span>
+                                    <span class="text-xs text-muted">2022</span>
+                                </div>
+                                <h3 class="text-2xl font-bold mb-2 group-hover:text-indigo-500 transition-colors">Aeon Mobile</h3>
+                                <p class="text-sm text-muted line-clamp-2">iOS and Android app design for a wellness startup.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="perspective-1000" x-show="activeFilter === 'all' || activeFilter === 'development'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100">
+                    <a href="project-detail.html" class="block tilt-card group">
+                        <div class="glass p-3 rounded-3xl border border-white/10 spotlight-card overflow-hidden">
+                            <div class="aspect-[4/3] rounded-2xl overflow-hidden mb-6 relative">
+                                <div class="absolute inset-0 bg-green-500/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
+                                <img src="assets/imgs/portfolio/portfolio1.avif" alt="Project" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700">
+                            </div>
+                            <div class="px-3 pb-3">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-xs font-bold text-green-500 uppercase tracking-wider">Development</span>
+                                    <span class="text-xs text-muted">2021</span>
+                                </div>
+                                <h3 class="text-2xl font-bold mb-2 group-hover:text-green-500 transition-colors">Pulse Monitor</h3>
+                                <p class="text-sm text-muted line-clamp-2">Health tracking dashboard connected to IoT devices.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+
+            <div class="text-center mt-20">
+                <button class="btn-shine px-12 py-4 bg-surface border border-border rounded-full text-foreground font-bold hover:bg-foreground hover:text-background transition-all shadow-lg hover:shadow-2xl">
+                    Load More Projects
+                </button>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="bg-surface border-t border-border pt-20 pb-10 relative z-20">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-5 gap-12 mb-16">
+                <div class="col-span-1 md:col-span-2">
+                    <a href="index.html" class="text-2xl font-bold tracking-tight mb-6 block hover:text-accent transition-colors">Aether</a>
+                    <p class="text-muted max-w-sm leading-relaxed">Building the web of tomorrow with pixel-perfect precision. Based in the Philippines, working globally.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-6 text-foreground">Explore</h4>
+                    <ul class="space-y-4 text-sm text-muted">
+                        <li><a href="index.html" class="block hover:text-foreground hover:translate-x-2 transition-all duration-300">Work</a></li>
+                        <li><a href="portfolio.html" class="block hover:text-foreground hover:translate-x-2 transition-all duration-300">Portfolio</a></li>
+                        <li><a href="about.html" class="block hover:text-foreground hover:translate-x-2 transition-all duration-300">About</a></li>
+                        <li><a href="blog.html" class="block hover:text-foreground hover:translate-x-2 transition-all duration-300">Writing</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-6 text-foreground">Connect</h4>
+                    <ul class="space-y-4 text-sm text-muted">
+                        <li><a href="#" class="block hover:text-foreground hover:translate-x-2 transition-all duration-300">LinkedIn</a></li>
+                        <li><a href="#" class="block hover:text-foreground hover:translate-x-2 transition-all duration-300">Twitter</a></li>
+                        <li><a href="#" class="block hover:text-foreground hover:translate-x-2 transition-all duration-300">GitHub</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-6 text-foreground">Additional Pages</h4>
+                    <ul class="space-y-4 text-sm text-muted">
+                        <li><a href="style-guide.html" class="block hover:text-foreground hover:translate-x-2 transition-all duration-300">Style Guide</a></li>
+                        <li><a href="404.html" class="block hover:text-foreground hover:translate-x-2 transition-all duration-300">404</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-muted">
+                <p class="hover:text-foreground transition-colors">© 2024 Zero Bloat UI. All rights reserved.</p>
+                <div class="flex items-center gap-2 mt-4 md:mt-0 group cursor-default">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    <span class="group-hover:text-green-500 transition-colors">Systems Operational</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
